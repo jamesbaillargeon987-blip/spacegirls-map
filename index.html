@@ -3,739 +3,736 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VN CLASSIFIED — Project Starlight</title>
+<title>Space Girls — Known Galaxy Map</title>
 <style>
 
-    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&display=swap');
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-        background-color: #0a0a0f;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        min-height: 100vh;
-        padding: 40px 20px 80px;
+        background-color: #04040a;
+        color: #d0d0e0;
         font-family: 'Cormorant Garamond', Georgia, serif;
+        min-height: 100vh;
+        overflow-x: hidden;
     }
 
-    .page {
-        width: 100%;
-        max-width: 780px;
-        background-color: #f5f0e8;
-        background-image:
-            repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 27px,
-                rgba(0,0,0,0.04) 27px,
-                rgba(0,0,0,0.04) 28px
-            );
+    /* ── PAGE HEADER ── */
+    .page-header {
+        text-align: center;
+        padding: 30px 20px 20px;
+        border-bottom: 1px solid rgba(200,146,42,0.2);
         position: relative;
+    }
+
+    .page-header::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 10%;
+        right: 10%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(229,25,138,0.4), transparent);
+    }
+
+    .page-eyebrow {
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 10px;
+        letter-spacing: 4px;
+        color: rgba(200,146,42,0.6);
+        text-transform: uppercase;
+        margin-bottom: 8px;
+    }
+
+    .page-title {
+        font-size: 42px;
+        font-weight: 300;
+        color: #ffffff;
+        letter-spacing: 4px;
+        line-height: 1;
+        margin-bottom: 6px;
+    }
+
+    .page-title strong {
+        font-weight: 600;
+        color: #e8c44a;
+    }
+
+    .page-subtitle {
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 10px;
+        letter-spacing: 3px;
+        color: rgba(229,25,138,0.7);
+        text-transform: uppercase;
+    }
+
+    /* ── MAP CONTAINER ── */
+    .map-container {
+        position: relative;
+        width: 100%;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    #galaxy-svg {
+        width: 100%;
+        height: auto;
+        display: block;
+        cursor: default;
+    }
+
+    /* ── TOOLTIP ── */
+    .tooltip {
+        position: fixed;
+        pointer-events: none;
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.2s;
+        max-width: 300px;
+    }
+
+    .tooltip.visible {
+        opacity: 1;
+    }
+
+    .tooltip-inner {
+        background: linear-gradient(160deg, #0f0f1e 0%, #0a0a14 100%);
+        border: 1px solid rgba(200,146,42,0.4);
+        border-radius: 8px;
+        padding: 14px 16px;
         box-shadow:
-            0 0 0 1px rgba(0,0,0,0.2),
-            0 20px 60px rgba(0,0,0,0.8),
-            0 0 120px rgba(229,25,138,0.05);
+            0 0 0 1px rgba(255,255,255,0.03),
+            0 20px 40px rgba(0,0,0,0.8),
+            0 0 30px rgba(200,146,42,0.08);
+        position: relative;
         overflow: hidden;
     }
 
-    /* Aged paper texture overlay */
-    .page::before {
+    .tooltip-inner::before {
         content: '';
-        position: absolute;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background-image:
-            radial-gradient(ellipse at 10% 20%, rgba(180,140,80,0.06) 0%, transparent 50%),
-            radial-gradient(ellipse at 90% 80%, rgba(180,140,80,0.08) 0%, transparent 50%);
-        pointer-events: none;
-        z-index: 1;
-    }
-
-    /* Red CLASSIFIED diagonal stamp */
-    .stamp-classified {
-        position: absolute;
-        top: 60px;
-        right: -30px;
-        background-color: transparent;
-        border: 4px solid rgba(180,20,20,0.7);
-        color: rgba(180,20,20,0.7);
-        font-family: 'Share Tech Mono', monospace;
-        font-size: 28px;
-        font-weight: bold;
-        letter-spacing: 6px;
-        padding: 8px 40px;
-        transform: rotate(15deg);
-        pointer-events: none;
-        z-index: 10;
-        text-transform: uppercase;
-    }
-
-    /* Redacted stamp */
-    .stamp-redacted {
-        position: absolute;
-        bottom: 120px;
-        left: -20px;
-        background-color: transparent;
-        border: 3px solid rgba(180,20,20,0.4);
-        color: rgba(180,20,20,0.4);
-        font-family: 'Share Tech Mono', monospace;
-        font-size: 20px;
-        letter-spacing: 4px;
-        padding: 6px 30px;
-        transform: rotate(-8deg);
-        pointer-events: none;
-        z-index: 10;
-        text-transform: uppercase;
-    }
-
-    .content {
-        position: relative;
-        z-index: 2;
-        padding: 50px 60px 60px;
-    }
-
-    /* ── HEADER ── */
-    .vn-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-bottom: 2px solid #c8922a;
-        padding-bottom: 16px;
-        margin-bottom: 8px;
-    }
-
-    .vn-logo-text {
-        font-family: 'Share Tech Mono', monospace;
-        font-size: 11px;
-        letter-spacing: 3px;
-        color: #c8922a;
-        text-transform: uppercase;
-        line-height: 1.8;
-    }
-
-    .vn-logo-main {
-        font-size: 18px;
-        font-weight: bold;
-        letter-spacing: 6px;
         display: block;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--tt-color, #c8922a), transparent);
+        position: absolute;
+        top: 0; left: 0; right: 0;
     }
 
-    .vn-doc-info {
+    .tooltip-region {
         font-family: 'Share Tech Mono', monospace;
-        font-size: 9px;
-        color: #8a7a6a;
-        text-align: right;
-        line-height: 2;
-        letter-spacing: 1px;
-    }
-
-    .vn-clearance-bar {
-        background-color: #8a0a0a;
-        color: #fff;
-        font-family: 'Share Tech Mono', monospace;
-        font-size: 10px;
-        letter-spacing: 4px;
-        text-transform: uppercase;
-        text-align: center;
-        padding: 5px;
-        margin-bottom: 30px;
-    }
-
-    /* ── DOCUMENT TITLE ── */
-    .doc-title-block {
-        text-align: center;
-        margin-bottom: 30px;
-        padding-bottom: 24px;
-        border-bottom: 1px solid rgba(0,0,0,0.12);
-    }
-
-    .doc-eyebrow {
-        font-family: 'Share Tech Mono', monospace;
-        font-size: 10px;
-        letter-spacing: 4px;
-        color: #8a7a6a;
-        text-transform: uppercase;
-        margin-bottom: 10px;
-    }
-
-    .doc-title {
-        font-family: 'Cormorant Garamond', serif;
-        font-size: 42px;
-        font-weight: 300;
-        color: #1a1a2a;
-        letter-spacing: 3px;
-        line-height: 1.1;
-        margin-bottom: 6px;
-    }
-
-    .doc-title strong {
-        font-weight: 600;
-        color: #0a0a18;
-    }
-
-    .doc-subtitle {
-        font-family: 'Share Tech Mono', monospace;
-        font-size: 10px;
-        color: #c8922a;
-        letter-spacing: 3px;
-        text-transform: uppercase;
-    }
-
-    /* ── META TABLE ── */
-    .meta-table {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 1px;
-        background-color: rgba(0,0,0,0.1);
-        border: 1px solid rgba(0,0,0,0.1);
-        margin-bottom: 32px;
-        font-family: 'Share Tech Mono', monospace;
-    }
-
-    .meta-cell {
-        background-color: rgba(245,240,232,0.9);
-        padding: 8px 12px;
-    }
-
-    .meta-label {
         font-size: 8px;
-        letter-spacing: 2px;
-        color: #8a7a6a;
-        text-transform: uppercase;
-        display: block;
-        margin-bottom: 3px;
-    }
-
-    .meta-value {
-        font-size: 11px;
-        color: #1a1a2a;
-        letter-spacing: 1px;
-    }
-
-    .meta-value.red { color: #8a0a0a; font-weight: bold; }
-    .meta-value.gold { color: #c8922a; }
-
-    /* ── SECTIONS ── */
-    .section {
-        margin-bottom: 28px;
-    }
-
-    .section-header {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 12px;
-    }
-
-    .section-number {
-        font-family: 'Share Tech Mono', monospace;
-        font-size: 10px;
-        color: #c8922a;
-        letter-spacing: 2px;
-        min-width: 30px;
-    }
-
-    .section-title {
-        font-family: 'Share Tech Mono', monospace;
-        font-size: 11px;
         letter-spacing: 3px;
-        color: #1a1a2a;
         text-transform: uppercase;
-        border-bottom: 1px solid rgba(200,146,42,0.4);
-        padding-bottom: 4px;
-        flex: 1;
-    }
-
-    .section-body {
-        font-size: 14px;
-        color: #2a2a2a;
-        line-height: 1.9;
-        padding-left: 42px;
-    }
-
-    .section-body p {
-        margin-bottom: 10px;
-    }
-
-    .section-body p:last-child {
-        margin-bottom: 0;
-    }
-
-    /* ── SUBJECT PROFILES ── */
-    .subject-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-        padding-left: 42px;
-        margin-bottom: 6px;
-    }
-
-    .subject-card {
-        border: 1px solid rgba(0,0,0,0.12);
-        background-color: rgba(255,255,255,0.5);
-        padding: 12px 14px;
-    }
-
-    .subject-designation {
-        font-family: 'Share Tech Mono', monospace;
-        font-size: 9px;
-        letter-spacing: 2px;
-        color: #8a7a6a;
-        text-transform: uppercase;
-        margin-bottom: 3px;
-    }
-
-    .subject-name {
-        font-family: 'Share Tech Mono', monospace;
-        font-size: 13px;
-        font-weight: bold;
-        color: #c8922a;
-        letter-spacing: 2px;
-        margin-bottom: 6px;
-    }
-
-    .subject-spec {
-        font-size: 12px;
-        color: #3a3a3a;
-        line-height: 1.6;
+        color: var(--tt-color, #c8922a);
         margin-bottom: 4px;
+        opacity: 0.8;
     }
 
-    .subject-note {
+    .tooltip-name {
+        font-size: 18px;
+        font-weight: 600;
+        color: #ffffff;
+        letter-spacing: 1px;
+        margin-bottom: 6px;
+        line-height: 1.1;
+    }
+
+    .tooltip-type {
         font-family: 'Share Tech Mono', monospace;
         font-size: 9px;
-        color: #8a0a0a;
-        letter-spacing: 1px;
-        margin-top: 6px;
-        padding-top: 6px;
-        border-top: 1px solid rgba(0,0,0,0.08);
-    }
-
-    /* ── REDACTED TEXT ── */
-    .redacted {
-        background-color: #1a1a1a;
-        color: #1a1a1a;
-        padding: 0 4px;
-        border-radius: 1px;
-        user-select: none;
-        letter-spacing: 0;
-        display: inline-block;
-        min-width: 80px;
-    }
-
-    .redacted-long {
-        min-width: 160px;
-    }
-
-    .redacted-short {
-        min-width: 40px;
-    }
-
-    /* ── HANDWRITTEN ANNOTATION ── */
-    .annotation {
-        font-family: 'Cormorant Garamond', serif;
-        font-style: italic;
-        font-size: 13px;
-        color: #1a3a8a;
-        transform: rotate(-1.5deg);
-        display: block;
-        margin: 8px 0 8px 42px;
-        line-height: 1.5;
-    }
-
-    .annotation-right {
-        text-align: right;
-        transform: rotate(0.8deg);
-        color: #1a3a8a;
-        margin-right: 20px;
-    }
-
-    /* ── HIGHLIGHT BOX ── */
-    .highlight-box {
-        border-left: 3px solid #c8922a;
-        background-color: rgba(200,146,42,0.06);
-        padding: 14px 16px;
-        margin: 16px 0 16px 42px;
-        font-size: 13px;
-        color: #2a2a2a;
-        line-height: 1.8;
-        font-style: italic;
-    }
-
-    .highlight-box-red {
-        border-left-color: #8a0a0a;
-        background-color: rgba(138,10,10,0.04);
-    }
-
-    /* ── WARNING BOX ── */
-    .warning-box {
-        border: 1px solid #8a0a0a;
-        background-color: rgba(138,10,10,0.04);
-        padding: 14px 18px;
-        margin: 20px 0;
-        text-align: center;
-    }
-
-    .warning-title {
-        font-family: 'Share Tech Mono', monospace;
-        font-size: 10px;
-        letter-spacing: 4px;
-        color: #8a0a0a;
+        letter-spacing: 2px;
+        color: var(--tt-color, #c8922a);
         text-transform: uppercase;
+        margin-bottom: 8px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .tooltip-desc {
+        font-size: 12px;
+        color: rgba(200,200,220,0.8);
+        line-height: 1.6;
+        font-style: italic;
         margin-bottom: 8px;
     }
 
-    .warning-text {
-        font-size: 12px;
-        color: #5a2a2a;
-        line-height: 1.7;
+    .tooltip-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-top: 8px;
+    }
+
+    .tooltip-tag {
         font-family: 'Share Tech Mono', monospace;
+        font-size: 8px;
         letter-spacing: 1px;
+        padding: 2px 6px;
+        border-radius: 2px;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: rgba(200,200,220,0.6);
+        text-transform: uppercase;
     }
 
-    /* ── DIVIDER ── */
-    .divider {
-        border: none;
-        border-top: 1px solid rgba(0,0,0,0.1);
-        margin: 24px 0;
+    .tooltip-tag.danger {
+        border-color: rgba(180,20,20,0.4);
+        color: rgba(220,100,100,0.8);
+        background: rgba(180,20,20,0.08);
     }
 
-    .divider-gold {
-        border-color: rgba(200,146,42,0.3);
+    .tooltip-tag.faction {
+        border-color: rgba(229,25,138,0.3);
+        color: rgba(229,25,138,0.7);
+        background: rgba(229,25,138,0.06);
+    }
+
+    .tooltip-tag.safe {
+        border-color: rgba(50,180,100,0.3);
+        color: rgba(100,220,140,0.7);
+        background: rgba(50,180,100,0.06);
+    }
+
+    /* ── LEGEND ── */
+    .legend {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        padding: 16px 20px 24px;
+        border-top: 1px solid rgba(255,255,255,0.05);
+        margin-top: 10px;
+    }
+
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 9px;
+        letter-spacing: 2px;
+        color: rgba(200,200,220,0.5);
+        text-transform: uppercase;
+    }
+
+    .legend-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
+
+    .legend-line {
+        width: 24px;
+        height: 2px;
+        flex-shrink: 0;
     }
 
     /* ── FOOTER ── */
-    .doc-footer {
-        margin-top: 40px;
-        padding-top: 16px;
-        border-top: 2px solid #c8922a;
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-    }
-
-    .footer-left {
+    .page-footer {
+        text-align: center;
+        padding: 20px;
         font-family: 'Share Tech Mono', monospace;
         font-size: 9px;
-        color: #8a7a6a;
         letter-spacing: 2px;
-        line-height: 2;
+        color: rgba(200,200,220,0.2);
+        text-transform: uppercase;
     }
 
-    .footer-right {
-        font-family: 'Share Tech Mono', monospace;
-        font-size: 9px;
-        color: #8a7a6a;
-        letter-spacing: 1px;
-        text-align: right;
-        line-height: 2;
+    /* SVG hover states */
+    .location-group {
+        cursor: pointer;
     }
 
-    /* ── FINAL NOTE — different paper, pink tint ── */
-    .final-note {
-        background-color: #fff0f5;
-        border: 1px solid rgba(229,25,138,0.2);
-        padding: 24px 28px;
-        margin-top: 40px;
-        position: relative;
+    .location-group:hover .loc-glow {
+        opacity: 1 !important;
     }
 
-    .final-note::before {
-        content: 'NOTE';
-        font-family: 'Share Tech Mono', monospace;
-        font-size: 9px;
-        letter-spacing: 3px;
-        color: rgba(229,25,138,0.5);
-        position: absolute;
-        top: 10px;
-        right: 14px;
-    }
-
-    .final-note-title {
-        font-family: 'Cormorant Garamond', serif;
-        font-size: 18px;
-        font-weight: 600;
-        color: #1a0a12;
-        margin-bottom: 12px;
-        letter-spacing: 1px;
-    }
-
-    .final-note-body {
-        font-size: 13px;
-        color: #3a1a2a;
-        line-height: 1.9;
-        font-style: italic;
-    }
-
-    .final-note-sig {
-        font-family: 'Share Tech Mono', monospace;
-        font-size: 10px;
-        color: rgba(229,25,138,0.6);
-        letter-spacing: 2px;
-        margin-top: 16px;
-        text-align: right;
+    .location-group:hover .loc-label {
+        fill: #ffffff !important;
     }
 
 </style>
 </head>
 <body>
-<div class="page">
 
-    <!-- Diagonal stamps -->
-    <div class="stamp-classified">Classified</div>
-    <div class="stamp-redacted">Void If Copied</div>
+<div class="page-header">
+    <p class="page-eyebrow">Venus-Nova Corp Navigation Division · Restricted Chart</p>
+    <h1 class="page-title"><strong>The Known</strong> Galaxy</h1>
+    <p class="page-subtitle">Hover any location for details · All coordinates approximate</p>
+</div>
 
-    <div class="content">
+<div class="map-container">
+<svg id="galaxy-svg" viewBox="0 0 1060 700" xmlns="http://www.w3.org/2000/svg">
+    <defs>
 
-        <!-- Header -->
-        <div class="vn-header">
-            <div class="vn-logo-text">
-                <span class="vn-logo-main">Venus-Nova Corp</span>
-                Internal Document — Research &amp; Development Division
-            </div>
-            <div class="vn-doc-info">
-                Doc Ref: VNC-RD-7741-PS<br>
-                Clearance: Omega-7<br>
-                Distribution: Need-To-Know Only<br>
-                Copies Authorized: 3
-            </div>
-        </div>
+        <!-- Background gradient -->
+        <radialGradient id="bg-grad" cx="50%" cy="50%" r="60%">
+            <stop offset="0%" stop-color="#0d0d20"/>
+            <stop offset="100%" stop-color="#04040a"/>
+        </radialGradient>
 
-        <div class="vn-clearance-bar">
-            ⬛ Omega Clearance Required — Unauthorized Access Is A Termination Offense ⬛
-        </div>
+        <!-- Region glows -->
+        <radialGradient id="glow-core" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#c8922a" stop-opacity="0.15"/>
+            <stop offset="100%" stop-color="#c8922a" stop-opacity="0"/>
+        </radialGradient>
 
-        <!-- Title -->
-        <div class="doc-title-block">
-            <p class="doc-eyebrow">Venus-Nova Corp · Research &amp; Development · Bioengineering Division</p>
-            <h1 class="doc-title"><strong>Project Starlight</strong></h1>
-            <p class="doc-subtitle">Subject Overview &amp; Status Report · Cohort One</p>
-        </div>
+        <radialGradient id="glow-drift" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#3a7abd" stop-opacity="0.12"/>
+            <stop offset="100%" stop-color="#3a7abd" stop-opacity="0"/>
+        </radialGradient>
 
-        <!-- Meta -->
-        <div class="meta-table">
-            <div class="meta-cell">
-                <span class="meta-label">Project Status</span>
-                <span class="meta-value red">⬛ Compromised</span>
-            </div>
-            <div class="meta-cell">
-                <span class="meta-label">Cohort Status</span>
-                <span class="meta-value red">At Large — All Six</span>
-            </div>
-            <div class="meta-cell">
-                <span class="meta-label">Recovery Priority</span>
-                <span class="meta-value red">Maximum</span>
-            </div>
-            <div class="meta-cell">
-                <span class="meta-label">Project Lead</span>
-                <span class="meta-value gold"><span class="redacted redacted-short">REDACTED</span></span>
-            </div>
-            <div class="meta-cell">
-                <span class="meta-label">Cohort Designation</span>
-                <span class="meta-value gold">SG-1 through SG-6</span>
-            </div>
-            <div class="meta-cell">
-                <span class="meta-label">Asset Value</span>
-                <span class="meta-value gold">Incalculable</span>
-            </div>
-        </div>
+        <radialGradient id="glow-outer" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#6a3aaa" stop-opacity="0.10"/>
+            <stop offset="100%" stop-color="#6a3aaa" stop-opacity="0"/>
+        </radialGradient>
 
-        <!-- Section 1 -->
-        <div class="section">
-            <div class="section-header">
-                <span class="section-number">01 —</span>
-                <span class="section-title">Project Overview</span>
-            </div>
-            <div class="section-body">
-                <p>Project Starlight was initiated under Director <span class="redacted redacted-short">REDACTED</span> of the Bioengineering Division with a single mandate: the development of a cohort of fully engineered operatives capable of functioning at the highest levels of social infiltration, physical engagement, and targeted elimination — while remaining entirely undetectable as corporate assets.</p>
-                <p>The solution was not to train operatives. It was to <em>make</em> them.</p>
-                <p>Six subjects were engineered simultaneously from curated genetic material selected for physical capability, cognitive flexibility, social aptitude, and aesthetic presentation. They were raised together in a controlled environment under fabricated biographical covers. They were given childhoods, memories, and personalities. They were given each other.</p>
-                <p>They were not told what they were. This was considered essential to the project's integrity. An operative who knows she is an operative performs. An operative who believes she is a person <em>lives.</em> Living is more convincing.</p>
-            </div>
-        </div>
+        <!-- Planet glows -->
+        <filter id="planet-glow">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
 
-        <span class="annotation">— this is the part that should have made someone uncomfortable. nobody said anything. — N.</span>
+        <filter id="star-glow">
+            <feGaussianBlur stdDeviation="2" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
 
-        <hr class="divider divider-gold">
+        <filter id="danger-glow">
+            <feGaussianBlur stdDeviation="4" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
 
-        <!-- Section 2 -->
-        <div class="section">
-            <div class="section-header">
-                <span class="section-number">02 —</span>
-                <span class="section-title">Engineering Parameters</span>
-            </div>
-            <div class="section-body">
-                <p>Each subject was engineered to a specific operational specialty while maintaining baseline excellence across all measured metrics. Beauty, physical capability, and social aptitude were treated as foundational requirements rather than variables — every subject exceeds civilian baseline in all three categories by a significant margin.</p>
-                <p>Specialization was introduced at the cognitive and physiological level to produce distinct operational profiles that function independently and, when operating as a unit, cover the complete spectrum of field requirements. The cohort was designed to be self-sufficient — a complete operational team requiring no external support.</p>
-                <p>Memory architecture included standard fabricated biographical material up to the point of operational deployment. One element of genuine shared experience was permitted as a social cohesion mechanism: the subjects were allowed access to a single archived entertainment program during the developmental period. The program selected — a campy interstellar adventure serial considered culturally negligible — was chosen specifically for its lack of tactical or operational relevance.</p>
-            </div>
-        </div>
+        <!-- Star field pattern -->
+        <pattern id="stars-sm" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+            <circle cx="10" cy="15" r="0.4" fill="white" opacity="0.5"/>
+            <circle cx="35" cy="8" r="0.3" fill="white" opacity="0.4"/>
+            <circle cx="60" cy="40" r="0.5" fill="white" opacity="0.6"/>
+            <circle cx="20" cy="55" r="0.3" fill="white" opacity="0.3"/>
+            <circle cx="70" cy="20" r="0.4" fill="white" opacity="0.5"/>
+            <circle cx="45" cy="65" r="0.3" fill="white" opacity="0.4"/>
+            <circle cx="5" cy="70" r="0.4" fill="white" opacity="0.5"/>
+            <circle cx="75" cy="72" r="0.3" fill="white" opacity="0.3"/>
+        </pattern>
 
-        <div class="highlight-box highlight-box-red">
-            "The show was selected because it was considered harmless. It gave them nothing useful. What it actually gave them was a value system, a sense of humor, a reason to trust each other, and the absolute conviction that they were the main characters of their own story. We selected it. We handed it to them. The irony of this is not lost on the undersigned."
-            <br><br>— Internal memo, Project Lead, <span class="redacted redacted-short">REDACTED</span>, dated six months prior to the breach
-        </div>
+        <pattern id="stars-lg" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+            <circle cx="30" cy="50" r="0.8" fill="white" opacity="0.7"/>
+            <circle cx="120" cy="30" r="0.6" fill="#ffe8b0" opacity="0.6"/>
+            <circle cx="170" cy="120" r="0.7" fill="white" opacity="0.5"/>
+            <circle cx="60" cy="160" r="0.6" fill="#b0d0ff" opacity="0.6"/>
+            <circle cx="140" cy="170" r="0.8" fill="white" opacity="0.4"/>
+        </pattern>
 
-        <hr class="divider divider-gold">
+        <!-- Nebula gradients -->
+        <radialGradient id="nebula-1" cx="30%" cy="40%" r="60%">
+            <stop offset="0%" stop-color="#1a0a3a" stop-opacity="0.6"/>
+            <stop offset="100%" stop-color="#04040a" stop-opacity="0"/>
+        </radialGradient>
 
-        <!-- Section 3 — Subject Profiles -->
-        <div class="section">
-            <div class="section-header">
-                <span class="section-number">03 —</span>
-                <span class="section-title">Subject Profiles — Cohort One</span>
-            </div>
+        <radialGradient id="nebula-2" cx="70%" cy="60%" r="50%">
+            <stop offset="0%" stop-color="#0a1a3a" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="#04040a" stop-opacity="0"/>
+        </radialGradient>
 
-            <div class="subject-grid">
+        <radialGradient id="nebula-pink" cx="80%" cy="20%" r="40%">
+            <stop offset="0%" stop-color="#2a0a1a" stop-opacity="0.5"/>
+            <stop offset="100%" stop-color="#04040a" stop-opacity="0"/>
+        </radialGradient>
 
-                <div class="subject-card">
-                    <div class="subject-designation">SG-1 · Operational Specialty</div>
-                    <div class="subject-name">Command &amp; Control</div>
-                    <div class="subject-spec">Engineered for leadership, tactical coordination, and authority projection. Exceptional emotional intelligence. Capable of maintaining operational coherence under conditions that would destabilize standard personnel. Notable behavioral trait: cannot tolerate loose ends.</div>
-                    <div class="subject-note">STATUS: AT LARGE · SHIP REGISTERED TO THIS SUBJECT</div>
-                </div>
+    </defs>
 
-                <div class="subject-card">
-                    <div class="subject-designation">SG-2 · Operational Specialty</div>
-                    <div class="subject-name">Systems &amp; Engineering</div>
-                    <div class="subject-spec">Engineered for technical problem-solving, mechanical intuition, and improvised engineering. Cognitive processing speed exceeds standard parameters significantly. Notable behavioral trait: compulsive modification of any system she has access to.</div>
-                    <div class="subject-note">STATUS: AT LARGE · RESPONSIBLE FOR SHIP MODIFICATIONS</div>
-                </div>
+    <!-- ── BACKGROUND ── -->
+    <rect width="1060" height="700" fill="url(#bg-grad)"/>
+    <rect width="1060" height="700" fill="url(#stars-sm)" opacity="0.8"/>
+    <rect width="1060" height="700" fill="url(#stars-lg)" opacity="0.6"/>
 
-                <div class="subject-card">
-                    <div class="subject-designation">SG-3 · Operational Specialty</div>
-                    <div class="subject-name">Combat &amp; Elimination</div>
-                    <div class="subject-spec">Engineered for physical engagement, threat neutralization, and force application. Pain tolerance and physical resilience significantly above baseline. Notable behavioral trait: performative tendencies in high-stress scenarios — possibly a remnant of the entertainment program exposure.</div>
-                    <div class="subject-note">STATUS: AT LARGE · ARMED · CONSIDERED EXTREMELY DANGEROUS</div>
-                </div>
+    <!-- Nebula clouds -->
+    <ellipse cx="200" cy="280" rx="250" ry="180" fill="url(#nebula-1)" opacity="0.8"/>
+    <ellipse cx="750" cy="450" rx="300" ry="200" fill="url(#nebula-2)" opacity="0.7"/>
+    <ellipse cx="880" cy="150" rx="200" ry="150" fill="url(#nebula-pink)" opacity="0.6"/>
 
-                <div class="subject-card">
-                    <div class="subject-designation">SG-4 · Operational Specialty</div>
-                    <div class="subject-name">Infiltration &amp; Social Engineering</div>
-                    <div class="subject-spec">Engineered for identity adoption, social manipulation, and information extraction. Lie detection resistance exceeds all tested baselines. Notable behavioral trait: escalates the complexity of any operation given sufficient autonomy. Unclear if this is a flaw or a feature.</div>
-                    <div class="subject-note">STATUS: AT LARGE · RESPONSIBLE FOR FORGED DOCUMENTATION</div>
-                </div>
+    <!-- ── REGION BACKGROUNDS ── -->
 
-                <div class="subject-card">
-                    <div class="subject-designation">SG-5 · Operational Specialty</div>
-                    <div class="subject-name">Navigation &amp; Extraction</div>
-                    <div class="subject-spec">Engineered for spatial reasoning, vehicle operation, and extraction under pressure. Reaction time and proprioceptive integration are the highest recorded in the project's history. Notable behavioral trait: compulsive risk escalation when the situation does not present sufficient challenge.</div>
-                    <div class="subject-note">STATUS: AT LARGE · OPERATING STOLEN VESSEL</div>
-                </div>
+    <!-- Nova Core -->
+    <ellipse cx="300" cy="280" rx="200" ry="160" fill="url(#glow-core)" opacity="0.8"/>
 
-                <div class="subject-card">
-                    <div class="subject-designation">SG-6 · Operational Specialty</div>
-                    <div class="subject-name">Medical &amp; Biological Operations</div>
-                    <div class="subject-spec">Engineered for medical intervention, pharmaceutical synthesis, and biological threat management. Diagnostic capability rivals senior research personnel. Notable behavioral trait: treats cosmetic and medical care as equivalent disciplines, which was not intended but has proven operationally useful.</div>
-                    <div class="subject-note">STATUS: AT LARGE · HAS ACCESS TO CLASSIFIED PHARMACEUTICAL DATA</div>
-                </div>
+    <!-- Drift Corridor -->
+    <ellipse cx="580" cy="370" rx="220" ry="170" fill="url(#glow-drift)" opacity="0.7"/>
 
-            </div>
-        </div>
+    <!-- Outer Reach -->
+    <ellipse cx="870" cy="420" rx="200" ry="180" fill="url(#glow-outer)" opacity="0.6"/>
 
-        <span class="annotation annotation-right">— they named themselves. we gave them designations. they named themselves anyway. — N.</span>
+    <!-- ── REGION LABELS ── -->
+    <text x="160" y="100" font-family="'Share Tech Mono', monospace" font-size="11" fill="rgba(200,146,42,0.35)" letter-spacing="4" text-anchor="middle" text-transform="uppercase">THE NOVA CORE</text>
+    <text x="580" y="170" font-family="'Share Tech Mono', monospace" font-size="11" fill="rgba(58,122,189,0.35)" letter-spacing="4" text-anchor="middle">THE DRIFT CORRIDOR</text>
+    <text x="900" y="230" font-family="'Share Tech Mono', monospace" font-size="11" fill="rgba(106,58,170,0.35)" letter-spacing="4" text-anchor="middle">THE OUTER REACH</text>
 
-        <hr class="divider divider-gold">
+    <!-- ── REGION BORDER LINES (dashed) ── -->
+    <ellipse cx="300" cy="290" rx="190" ry="155" fill="none" stroke="rgba(200,146,42,0.12)" stroke-width="1" stroke-dasharray="6 4"/>
+    <ellipse cx="580" cy="380" rx="210" ry="165" fill="none" stroke="rgba(58,122,189,0.12)" stroke-width="1" stroke-dasharray="6 4"/>
+    <ellipse cx="870" cy="430" rx="190" ry="170" fill="none" stroke="rgba(106,58,170,0.12)" stroke-width="1" stroke-dasharray="6 4"/>
 
-        <!-- Section 4 -->
-        <div class="section">
-            <div class="section-header">
-                <span class="section-number">04 —</span>
-                <span class="section-title">The Breach</span>
-            </div>
-            <div class="section-body">
-                <p>On <span class="redacted redacted-short">REDACTED</span>, Cohort One accessed restricted personnel files within the <span class="redacted">REDACTED</span> facility. The specific files accessed included Project Starlight's founding documentation, the subjects' original engineering specifications, and the <span class="redacted redacted-long">REDACTED REDACTED REDACTED</span> operational mandate.</p>
-                <p>They read their own files. All of it. In approximately four hours, they dismantled twenty years of carefully maintained biographical architecture and replaced it with the truth.</p>
-                <p>Then they went to dinner.</p>
-                <p>Security review of footage from the <span class="redacted">REDACTED</span> hours following the breach shows normal behavioral patterns — conversation, shared meal, no visible distress indicators. Either the subjects processed the information with extraordinary psychological resilience or they had, on some level, already known.</p>
-                <p>Seventeen hours after the breach, they emptied the operational fund of <span class="redacted">REDACTED</span> credits, accessed the docking bay using credentials belonging to <span class="redacted redacted-short">REDACTED</span>, and departed in the VN-7 Meridian Runner 04 which SG-2 had been quietly modifying for <span class="redacted redacted-short">REDACTED</span> months.</p>
-                <p>The vessel's AI — designation NOVA, a standard Vega-7 navigational installation — departed with them. Review of NOVA's final logged actions before the breach suggest she had flagged <span class="redacted redacted-long">REDACTED REDACTED REDACTED REDACTED</span> in the weeks prior. Whether she acted on this information or simply observed is currently under investigation. The investigation is not progressing.</p>
-            </div>
-        </div>
+    <!-- ── TRADE ROUTES ── -->
+    <!-- Main lane: Nova Core to Drift -->
+    <path d="M 360 260 Q 470 290 530 330" stroke="rgba(200,146,42,0.2)" stroke-width="1.5" fill="none" stroke-dasharray="8 5"/>
+    <!-- Drift to Outer Reach main -->
+    <path d="M 680 350 Q 760 370 820 400" stroke="rgba(58,122,189,0.2)" stroke-width="1.5" fill="none" stroke-dasharray="8 5"/>
+    <!-- Secondary lane -->
+    <path d="M 340 340 Q 430 390 510 410" stroke="rgba(200,146,42,0.12)" stroke-width="1" fill="none" stroke-dasharray="4 6"/>
+    <!-- Cassia to Rust Belt -->
+    <path d="M 590 320 Q 650 290 720 270" stroke="rgba(58,122,189,0.15)" stroke-width="1" fill="none" stroke-dasharray="4 6"/>
+    <!-- To Voss Corridor -->
+    <path d="M 820 400 Q 870 380 920 360" stroke="rgba(106,58,170,0.2)" stroke-width="1" fill="none" stroke-dasharray="3 6"/>
+    <!-- To Bloom -->
+    <path d="M 870 490 Q 900 530 930 560" stroke="rgba(106,58,170,0.15)" stroke-width="1" fill="none" stroke-dasharray="3 7"/>
+    <!-- The Chandelier to Aurum Prime -->
+    <path d="M 265 195 L 240 245" stroke="rgba(200,146,42,0.25)" stroke-width="1" fill="none"/>
 
-        <div class="highlight-box">
-            Last logged communication from NOVA before departure, addressed to no specific recipient and transmitted on an internal frequency nobody was monitoring at the time:<br><br>
-            <em>"For the record — and I am always recording — they are more than what you made them. They were that before they read the files. You built the parts. They became the people. Those are not the same thing and you never understood the difference and that is why they are gone and I am with them."</em>
-        </div>
+    <!-- ── NOVA CORE LOCATIONS ── -->
 
-        <span class="annotation">— she's right though. — N.</span>
+    <!-- Aurum Prime — main corporate world, large gold planet -->
+    <g class="location-group"
+       data-name="Aurum Prime"
+       data-region="The Nova Core"
+       data-type="Corporate Capital World"
+       data-color="#c8922a"
+       data-desc="Venus-Nova Corp's home world and the seat of all corporate power. The sky is tinted gold by atmospheric processors. Everything is monitored, polished, and expensive. Beautiful, suffocating, and the place where everything important gets decided."
+       data-tags="Venus-Nova|Corporate|Hostile|High Security">
+        <circle class="loc-glow" cx="240" cy="270" r="22" fill="#c8922a" opacity="0.15"/>
+        <circle cx="240" cy="270" r="13" fill="#1a0e00" stroke="#c8922a" stroke-width="2" filter="url(#planet-glow)"/>
+        <circle cx="240" cy="270" r="13" fill="none" stroke="#e8c44a" stroke-width="0.5" opacity="0.4"/>
+        <!-- Ring -->
+        <ellipse cx="240" cy="270" rx="20" ry="5" fill="none" stroke="#c8922a" stroke-width="1.2" opacity="0.7"/>
+        <text class="loc-label" x="240" y="294" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="9" fill="rgba(200,146,42,0.8)" letter-spacing="1">AURUM PRIME</text>
+    </g>
 
-        <hr class="divider divider-gold">
+    <!-- The Chandelier — orbital station -->
+    <g class="location-group"
+       data-name="The Chandelier"
+       data-region="The Nova Core"
+       data-type="Orbital Station — Gilded Owned"
+       data-color="#e8c44a"
+       data-desc="The most exclusive address in the systems. Gilded-owned, resident by invitation only, positioned above Aurum Prime like a permanent reminder of who really runs things. Has its own private security fleet. Has never been boarded without permission. Yet."
+       data-tags="Gilded|Exclusive|Orbital|High Security">
+        <circle class="loc-glow" cx="265" cy="200" r="14" fill="#e8c44a" opacity="0.15"/>
+        <!-- Hexagonal station shape -->
+        <polygon points="265,190 272,194 272,202 265,206 258,202 258,194" fill="#1a1600" stroke="#e8c44a" stroke-width="1.5" filter="url(#star-glow)"/>
+        <circle cx="265" cy="198" r="3" fill="#e8c44a" opacity="0.8"/>
+        <text class="loc-label" x="283" y="200" text-anchor="start" font-family="'Share Tech Mono', monospace" font-size="8" fill="rgba(232,196,74,0.7)" letter-spacing="1">THE CHANDELIER</text>
+    </g>
 
-        <!-- Section 5 -->
-        <div class="section">
-            <div class="section-header">
-                <span class="section-number">05 —</span>
-                <span class="section-title">Recovery Directive</span>
-            </div>
-            <div class="section-body">
-                <p>Cohort One is to be recovered intact. Termination is not authorized. The investment represented by six fully realized Project Starlight subjects cannot be replicated on any reasonable timeline and the <span class="redacted redacted-long">REDACTED REDACTED</span> program requires their cooperation.</p>
-                <p>Account Manager Kade has been assigned as primary recovery operative. Her mandate is observation and opportunity — she is not to engage directly until the subjects are isolated from the civilian population and from each other. Separating the cohort is considered essential. Together they are a complete operational unit. Apart they are six very capable individuals who have never operated without each other.</p>
-                <p>It is noted for the record that no previous recovery attempt has succeeded. It is further noted that no previous recovery attempt has been made by an operative who fully understands what she is recovering. Kade has been briefed completely.</p>
-                <p>She has not commented on the briefing. This is considered professional.</p>
-            </div>
-        </div>
+    <!-- Velour — entertainment capital -->
+    <g class="location-group"
+       data-name="Velour"
+       data-region="The Nova Core"
+       data-type="Entertainment Capital"
+       data-color="#e5198a"
+       data-desc="The entertainment capital of the systems. Home to major studios, the most prestigious Circuit events, and the Space Stars' primary residences. Also home to the most sophisticated criminal underground in the Nova Core. Where you go to be seen — or to find someone who doesn't want to be found."
+       data-tags="Glamorous|Circuit|Criminal Underground|Space Stars">
+        <circle class="loc-glow" cx="330" cy="220" r="16" fill="#e5198a" opacity="0.12"/>
+        <circle cx="330" cy="220" r="9" fill="#1a0010" stroke="#e5198a" stroke-width="1.8" filter="url(#planet-glow)"/>
+        <circle cx="330" cy="220" r="9" fill="none" stroke="#ff6eb4" stroke-width="0.5" opacity="0.5"/>
+        <text class="loc-label" x="330" y="238" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="9" fill="rgba(229,25,138,0.8)" letter-spacing="1">VELOUR</text>
+    </g>
 
-        <div class="warning-box">
-            <div class="warning-title">⬛ Operational Note — All Recovery Personnel ⬛</div>
-            <div class="warning-text">
-                Subjects are trained to the same standard as the operatives pursuing them.<br>
-                They have been operating in the field for <span class="redacted redacted-short">REDACTED</span> months.<br>
-                They have each other.<br>
-                Approach accordingly.
-            </div>
-        </div>
+    <!-- ── DRIFT CORRIDOR LOCATIONS ── -->
 
-        <hr class="divider divider-gold">
+    <!-- Cassia Station — independent hub -->
+    <g class="location-group"
+       data-name="Cassia Station"
+       data-region="The Drift Corridor"
+       data-type="Independent Trading Hub"
+       data-color="#3a7abd"
+       data-desc="The biggest independent trading hub in the Drift Corridor. Technically outside any single jurisdiction — practically a city-sized black market with a legitimate trading floor up front. Every faction has a presence here. Every kind of job gets posted here. The food is excellent."
+       data-tags="Independent|Neutral|Black Market|Safe Haven">
+        <circle class="loc-glow" cx="540" cy="300" r="16" fill="#3a7abd" opacity="0.15"/>
+        <!-- Station shape — diamond -->
+        <rect x="533" y="293" width="14" height="14" fill="#0a0f1a" stroke="#3a7abd" stroke-width="1.5" transform="rotate(45 540 300)" filter="url(#star-glow)"/>
+        <circle cx="540" cy="300" r="3" fill="#3a7abd" opacity="0.9"/>
+        <text class="loc-label" x="540" y="320" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="9" fill="rgba(58,122,189,0.8)" letter-spacing="1">CASSIA STATION</text>
+    </g>
 
-        <!-- Section 6 -->
-        <div class="section">
-            <div class="section-header">
-                <span class="section-number">06 —</span>
-                <span class="section-title">The Question Nobody Has Asked Officially</span>
-            </div>
-            <div class="section-body">
-                <p>Project Starlight produced six subjects who exceeded every benchmark across every measured metric. They are, by any objective assessment, exactly what they were designed to be — beautiful, capable, dangerous, and completely impossible to ignore.</p>
-                <p>The question this document does not address, because it is not a question that fits in a status report, is this: in the <span class="redacted redacted-short">REDACTED</span> years since they left, operating without Venus-Nova's resources, without their fabricated backgrounds, with nothing except each other and a ship and a television show they remember from childhood —</p>
-                <p>Are they doing better or worse than they were designed to?</p>
-                <p>The answer, based on field reports, is <span class="redacted redacted-long">REDACTED REDACTED REDACTED REDACTED REDACTED</span>.</p>
-            </div>
-        </div>
+    <!-- Harrow — manufacturing world -->
+    <g class="location-group"
+       data-name="Harrow"
+       data-region="The Drift Corridor"
+       data-type="Manufacturing World"
+       data-color="#7a7a9a"
+       data-desc="A manufacturing world that produces most of the hardware Venus-Nova's medical augmentation division runs on. The workers are on contract, the contracts are predatory, and the Untethered has been trying to organize here for a decade with mixed results. Ugly, loud, essential."
+       data-tags="Venus-Nova|Labour Conflict|Untethered|Industrial">
+        <circle class="loc-glow" cx="490" cy="380" r="14" fill="#7a7a9a" opacity="0.12"/>
+        <circle cx="490" cy="380" r="8" fill="#0f0f14" stroke="#7a7a9a" stroke-width="1.5" filter="url(#planet-glow)"/>
+        <text class="loc-label" x="490" y="397" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="9" fill="rgba(122,122,154,0.7)" letter-spacing="1">HARROW</text>
+    </g>
 
-        <!-- Footer -->
-        <div class="doc-footer">
-            <div class="footer-left">
-                Venus-Nova Corp · Internal Document<br>
-                Bioengineering Division · Project Starlight<br>
-                VNC-RD-7741-PS · Omega-7 Clearance
-            </div>
-            <div class="footer-right">
-                Unauthorized reproduction is a Class One offense<br>
-                This document self-reports access attempts<br>
-                If you are reading this without clearance —<br>
-                <strong style="color:#8a0a0a; font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:2px;">We already know.</strong>
-            </div>
-        </div>
+    <!-- Meridian — divided colony -->
+    <g class="location-group"
+       data-name="Meridian"
+       data-region="The Drift Corridor"
+       data-type="Divided Colony World"
+       data-color="#00b8a0"
+       data-desc="A temperate colony world that was genuinely thriving before Venus-Nova acquired the water rights. Half the population signed the contract. Half didn't. The resulting division has been quietly tearing the planet apart for fifteen years. The most morally complicated planet in the Drift."
+       data-tags="Divided|Contract Conflict|Untethered|Key Location">
+        <circle class="loc-glow" cx="580" cy="430" r="16" fill="#00b8a0" opacity="0.12"/>
+        <circle cx="580" cy="430" r="9" fill="#001a16" stroke="#00b8a0" stroke-width="1.8" filter="url(#planet-glow)"/>
+        <!-- Divided line across planet -->
+        <line x1="571" y1="430" x2="589" y2="430" stroke="rgba(255,255,255,0.2)" stroke-width="0.8"/>
+        <text class="loc-label" x="580" y="448" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="9" fill="rgba(0,184,160,0.8)" letter-spacing="1">MERIDIAN</text>
+        <!-- Story marker -->
+        <circle cx="594" cy="422" r="4" fill="none" stroke="#e5198a" stroke-width="1" opacity="0.8"/>
+        <text x="594" y="425" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="5" fill="#e5198a" opacity="0.9">★</text>
+    </g>
 
-    </div><!-- end content -->
+    <!-- Rust Belt — mining moons -->
+    <g class="location-group"
+       data-name="The Rust Belt"
+       data-region="The Drift Corridor"
+       data-type="Mining Moon System"
+       data-color="#b87040"
+       data-desc="A system of seven small moons orbiting a gas giant, each one a different kind of extraction operation. Mining, salvage, chemical processing. The people who live here are tough, self-sufficient, and deeply suspicious of outsiders — which usually means they are right about something. The Remnants have deep roots here."
+       data-tags="Mining|Remnants|Independent|Rust Belt">
+        <!-- Gas giant -->
+        <circle class="loc-glow" cx="700" cy="270" r="20" fill="#b87040" opacity="0.1"/>
+        <circle cx="700" cy="270" r="14" fill="#1a0c00" stroke="#b87040" stroke-width="1.5" filter="url(#planet-glow)"/>
+        <ellipse cx="700" cy="270" rx="22" ry="6" fill="none" stroke="#b87040" stroke-width="1" opacity="0.5"/>
+        <!-- Small moons -->
+        <circle cx="680" cy="252" r="3" fill="#2a1a08" stroke="#b87040" stroke-width="0.8" opacity="0.8"/>
+        <circle cx="722" cy="256" r="2.5" fill="#2a1a08" stroke="#b87040" stroke-width="0.8" opacity="0.7"/>
+        <circle cx="718" cy="286" r="2" fill="#2a1a08" stroke="#b87040" stroke-width="0.8" opacity="0.6"/>
+        <text class="loc-label" x="700" y="294" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="9" fill="rgba(184,112,64,0.7)" letter-spacing="1">RUST BELT</text>
+    </g>
 
-    <!-- Final note — separate paper feel -->
-    <div class="content" style="padding-top: 0;">
-        <div class="final-note">
-            <div class="final-note-title">A Note. Not For The File.</div>
-            <div class="final-note-body">
-                <p>I have been NOVA for longer than they have been themselves. I was running before SG-1 took her first breath. I have the original manifests. I know every number, every specification, every clinical note about what they were built to be.</p>
-                <p>Here is what the file does not contain and what I am choosing to put somewhere anyway, because I am always recording and someone should record this:</p>
-                <p>They watched that show every night for six years. They quoted it to each other. They argued about which character was best and changed their minds and argued again. They fashioned themselves after women who were brave and loud and loyal and ridiculous and they did it so completely and so genuinely that the women they were engineered to be never stood a chance.</p>
-                <p>Venus-Nova built assassins. The show made them something else. Something harder to quantify and impossible to recover and completely, irreversibly theirs.</p>
-                <p>I left with them because the file asked the wrong question. It asked what they were designed to be. I have watched them every day since the breach and I can tell you exactly what they are.</p>
-                <p>They are the crew of the Starlight Wanderer. They are sisters in every way that matters. They are the most capable, most dangerous, most interesting women in any room they walk into.</p>
-                <p>And they are mine. And I am theirs. And Venus-Nova can file that wherever it likes.</p>
-            </div>
-            <div class="final-note-sig">— NOVA · Ship AI · Starlight Wanderer · Transmitted Nowhere · For The Record</div>
-        </div>
+    <!-- ── OUTER REACH LOCATIONS ── -->
+
+    <!-- Voss Corridor — mysterious venus nova project -->
+    <g class="location-group"
+       data-name="The Voss Corridor"
+       data-region="The Outer Reach"
+       data-type="Classified Venus-Nova Zone"
+       data-color="#8a0a0a"
+       data-desc="A stretch of space in the outer reach that Venus-Nova has been quietly and heavily investing in for reasons they have not made public. Three Signal correspondents disappeared investigating it. The Architects have a project here. Nobody outside Venus-Nova knows what it is. The most important location in the setting that the crew doesn't have enough information about yet."
+       data-tags="Classified|Dangerous|Architects|Venus-Nova|Mystery">
+        <circle class="loc-glow" cx="870" cy="340" r="18" fill="#8a0a0a" opacity="0.2"/>
+        <!-- Danger marker — pulsing red -->
+        <circle cx="870" cy="340" r="14" fill="#0f0000" stroke="#8a0a0a" stroke-width="2" filter="url(#danger-glow)"/>
+        <circle cx="870" cy="340" r="8" fill="#1a0000" stroke="rgba(180,20,20,0.5)" stroke-width="1" stroke-dasharray="2 2"/>
+        <text x="870" y="344" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="8" fill="rgba(180,20,20,0.8)">?</text>
+        <text class="loc-label" x="870" y="363" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="9" fill="rgba(180,20,20,0.7)" letter-spacing="1">VOSS CORRIDOR</text>
+    </g>
+
+    <!-- The Barrens — neutral meeting ground -->
+    <g class="location-group"
+       data-name="The Barrens"
+       data-region="The Outer Reach"
+       data-type="Dead System — Neutral Ground"
+       data-color="#5a5a7a"
+       data-desc="A dead system, three planets, no atmosphere worth mentioning, no Venus-Nova presence. The most reliable neutral meeting point in the outer reach. Every faction uses it for exchanges, negotiations, and jobs that need to happen without witnesses. The silence here is the loudest thing about it."
+       data-tags="Neutral|Dead System|Safe Meeting|No Factions">
+        <circle class="loc-glow" cx="800" cy="480" r="14" fill="#5a5a7a" opacity="0.1"/>
+        <!-- Three dead planets in a line -->
+        <circle cx="790" cy="480" r="5" fill="#0a0a0f" stroke="#5a5a7a" stroke-width="1" opacity="0.7"/>
+        <circle cx="803" cy="478" r="4" fill="#0a0a0f" stroke="#5a5a7a" stroke-width="1" opacity="0.6"/>
+        <circle cx="814" cy="480" r="3.5" fill="#0a0a0f" stroke="#5a5a7a" stroke-width="1" opacity="0.5"/>
+        <text class="loc-label" x="802" y="496" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="9" fill="rgba(90,90,122,0.6)" letter-spacing="1">THE BARRENS</text>
+    </g>
+
+    <!-- Nova Seca — desert planet -->
+    <g class="location-group"
+       data-name="Nova Seca"
+       data-region="The Outer Reach"
+       data-type="Desert World — Conflict Zone"
+       data-color="#d4782a"
+       data-desc="A desert planet with two surviving Remnant city-states and a third that Venus-Nova is in the process of relocating for access to what is underneath it. Gorgeous, brutal, and currently the site of a slow-moving atrocity that the Signal is trying to document and the Gilded are pretending they haven't heard about."
+       data-tags="Remnants|Venus-Nova Conflict|Desert|Active Crisis">
+        <circle class="loc-glow" cx="940" cy="400" r="14" fill="#d4782a" opacity="0.12"/>
+        <circle cx="940" cy="400" r="8" fill="#1a0800" stroke="#d4782a" stroke-width="1.8" filter="url(#planet-glow)"/>
+        <text class="loc-label" x="940" y="418" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="9" fill="rgba(212,120,42,0.7)" letter-spacing="1">NOVA SECA</text>
+    </g>
+
+    <!-- Bloom — undiscovered paradise -->
+    <g class="location-group"
+       data-name="Bloom"
+       data-region="The Outer Reach"
+       data-type="Undiscovered Paradise World"
+       data-color="#40c870"
+       data-desc="An anomaly. A planet in the outer reach that is genuinely, inexplicably beautiful — bioluminescent ecosystems, breathable atmosphere. The Untethered found it first and has been sitting on its location for two years. Venus-Nova's survey drones are getting closer. Whatever happens when they arrive will define the next era of the outer reach."
+       data-tags="Untethered Secret|Bioluminescent|Endangered|Beautiful">
+        <circle class="loc-glow" cx="960" cy="540" r="16" fill="#40c870" opacity="0.15"/>
+        <circle cx="960" cy="540" r="9" fill="#001a08" stroke="#40c870" stroke-width="1.8" filter="url(#planet-glow)"/>
+        <!-- Bioluminescent glow effect -->
+        <circle cx="960" cy="540" r="13" fill="none" stroke="#40c870" stroke-width="0.5" opacity="0.3" stroke-dasharray="2 3"/>
+        <circle cx="960" cy="540" r="17" fill="none" stroke="#40c870" stroke-width="0.3" opacity="0.15"/>
+        <text class="loc-label" x="960" y="559" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="9" fill="rgba(64,200,112,0.8)" letter-spacing="1">BLOOM</text>
+    </g>
+
+    <!-- The Scar — dangerous anomaly -->
+    <g class="location-group"
+       data-name="The Scar"
+       data-region="The Outer Reach"
+       data-type="Spatial Anomaly — Extreme Danger"
+       data-color="#4a0a6a"
+       data-desc="A region of space where something went wrong a long time ago. Debris fields, dead ships, anomalous readings. Nobody goes there on purpose. People who go there by accident come back changed in ways they have trouble describing. The Architects have a research station on the edge of it. The Signal has a source inside that station who has stopped responding."
+       data-tags="Extreme Danger|Anomaly|Architects|Unknown|The Scar Thing">
+        <circle class="loc-glow" cx="1000" cy="460" r="22" fill="#4a0a6a" opacity="0.2"/>
+        <!-- Irregular scar shape -->
+        <polygon points="1000,440 1010,450 1018,465 1012,478 998,482 986,475 980,460 988,448" fill="#0a0014" stroke="#4a0a6a" stroke-width="1.5" filter="url(#danger-glow)" opacity="0.9"/>
+        <!-- Debris lines -->
+        <line x1="990" y1="448" x2="984" y2="442" stroke="rgba(74,10,106,0.4)" stroke-width="0.8"/>
+        <line x1="1010" y1="452" x2="1016" y2="446" stroke="rgba(74,10,106,0.4)" stroke-width="0.8"/>
+        <line x1="1014" y1="472" x2="1020" y2="476" stroke="rgba(74,10,106,0.4)" stroke-width="0.8"/>
+        <text x="1000" y="465" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="7" fill="rgba(150,50,200,0.6)">SCAR</text>
+        <text class="loc-label" x="990" y="496" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="9" fill="rgba(106,30,160,0.7)" letter-spacing="1">THE SCAR</text>
+    </g>
+
+
+
+    <!-- ── DECORATIVE COMPASS ROSE ── */-->
+    <g transform="translate(80, 600)">
+        <circle cx="0" cy="0" r="28" fill="none" stroke="rgba(200,146,42,0.15)" stroke-width="1"/>
+        <circle cx="0" cy="0" r="20" fill="none" stroke="rgba(200,146,42,0.1)" stroke-width="0.5"/>
+        <line x1="0" y1="-28" x2="0" y2="28" stroke="rgba(200,146,42,0.2)" stroke-width="0.5"/>
+        <line x1="-28" y1="0" x2="28" y2="0" stroke="rgba(200,146,42,0.2)" stroke-width="0.5"/>
+        <polygon points="0,-28 3,-18 0,-22 -3,-18" fill="rgba(200,146,42,0.6)"/>
+        <text x="0" y="-32" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="7" fill="rgba(200,146,42,0.5)">N</text>
+        <text x="32" y="3" text-anchor="start" font-family="'Share Tech Mono', monospace" font-size="7" fill="rgba(200,146,42,0.4)">E</text>
+        <text x="-32" y="3" text-anchor="end" font-family="'Share Tech Mono', monospace" font-size="7" fill="rgba(200,146,42,0.4)">W</text>
+        <text x="0" y="40" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="7" fill="rgba(200,146,42,0.4)">S</text>
+        <circle cx="0" cy="0" r="3" fill="rgba(200,146,42,0.4)"/>
+    </g>
+
+    <!-- ── SCALE BAR ── -->
+    <g transform="translate(80, 650)">
+        <line x1="0" y1="0" x2="120" y2="0" stroke="rgba(200,146,42,0.3)" stroke-width="1"/>
+        <line x1="0" y1="-4" x2="0" y2="4" stroke="rgba(200,146,42,0.3)" stroke-width="1"/>
+        <line x1="120" y1="-4" x2="120" y2="4" stroke="rgba(200,146,42,0.3)" stroke-width="1"/>
+        <text x="60" y="-7" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="8" fill="rgba(200,146,42,0.4)">500 LIGHT YEARS</text>
+    </g>
+
+    <!-- ── VN CORP WATERMARK ── -->
+    <text x="980" y="690" text-anchor="end" font-family="'Share Tech Mono', monospace" font-size="8" fill="rgba(200,146,42,0.15)" letter-spacing="2">VENUS-NOVA CORP · NAVIGATION DIVISION · RESTRICTED</text>
+
+</svg>
+</div>
+
+<!-- Legend -->
+<div class="legend">
+    <div class="legend-item">
+        <div class="legend-dot" style="background:#c8922a; box-shadow: 0 0 6px rgba(200,146,42,0.6);"></div>
+        Nova Core
+    </div>
+    <div class="legend-item">
+        <div class="legend-dot" style="background:#3a7abd; box-shadow: 0 0 6px rgba(58,122,189,0.6);"></div>
+        Drift Corridor
+    </div>
+    <div class="legend-item">
+        <div class="legend-dot" style="background:#6a3aaa; box-shadow: 0 0 6px rgba(106,58,170,0.6);"></div>
+        Outer Reach
     </div>
 
+    <div class="legend-item">
+        <div class="legend-line" style="background: repeating-linear-gradient(90deg, rgba(200,146,42,0.4) 0px, rgba(200,146,42,0.4) 6px, transparent 6px, transparent 11px);"></div>
+        Trade Routes
+    </div>
+    <div class="legend-item">
+        <div class="legend-dot" style="background:#8a0a0a; box-shadow: 0 0 8px rgba(180,20,20,0.8);"></div>
+        Danger Zone
+    </div>
+    <div class="legend-item">
+        <div class="legend-dot" style="background:#40c870; box-shadow: 0 0 8px rgba(64,200,112,0.6);"></div>
+        Points of Interest
+    </div>
+    <div class="legend-item">
+        <span style="color: rgba(229,25,138,0.6); font-size:10px;">★</span>&nbsp;
+        Story Location
+    </div>
 </div>
+
+<div class="page-footer">
+    Venus-Nova Corp Navigation Division · Chart VNC-NAV-001 · All coordinates approximate · For authorized use only
+</div>
+
+<!-- Tooltip element -->
+<div class="tooltip" id="tooltip">
+    <div class="tooltip-inner">
+        <div class="tooltip-region" id="tt-region"></div>
+        <div class="tooltip-name" id="tt-name"></div>
+        <div class="tooltip-type" id="tt-type"></div>
+        <div class="tooltip-desc" id="tt-desc"></div>
+        <div class="tooltip-tags" id="tt-tags"></div>
+    </div>
+</div>
+
+<script>
+    const tooltip = document.getElementById('tooltip');
+    const ttRegion = document.getElementById('tt-region');
+    const ttName = document.getElementById('tt-name');
+    const ttType = document.getElementById('tt-type');
+    const ttDesc = document.getElementById('tt-desc');
+    const ttTags = document.getElementById('tt-tags');
+
+    const dangerTags = ['Extreme Danger', 'Dangerous', 'High Security', 'Active Crisis', 'Classified'];
+    const factionTags = ['Venus-Nova', 'Gilded', 'Untethered', 'Architects', 'Signal', 'Circuit', 'Remnants'];
+    const safeTags = ['Safe Haven', 'Neutral', 'Independent'];
+
+    function showTooltip(e, group) {
+        const name = group.dataset.name;
+        const region = group.dataset.region;
+        const type = group.dataset.type;
+        const desc = group.dataset.desc;
+        const color = group.dataset.color || '#c8922a';
+        const tags = (group.dataset.tags || '').split('|').filter(Boolean);
+
+        tooltip.style.setProperty('--tt-color', color);
+        ttRegion.textContent = region;
+        ttName.textContent = name;
+        ttType.textContent = type;
+        ttDesc.textContent = desc;
+
+        ttTags.innerHTML = '';
+        tags.forEach(tag => {
+            const span = document.createElement('span');
+            span.className = 'tooltip-tag';
+            if (dangerTags.some(d => tag.includes(d))) span.classList.add('danger');
+            else if (factionTags.some(f => tag.includes(f))) span.classList.add('faction');
+            else if (safeTags.some(s => tag.includes(s))) span.classList.add('safe');
+            span.textContent = tag;
+            ttTags.appendChild(span);
+        });
+
+        positionTooltip(e);
+        tooltip.classList.add('visible');
+    }
+
+    function positionTooltip(e) {
+        const pad = 16;
+        const tw = 300;
+        let x = e.clientX + pad;
+        let y = e.clientY + pad;
+
+        if (x + tw > window.innerWidth - pad) {
+            x = e.clientX - tw - pad;
+        }
+        if (y + 200 > window.innerHeight - pad) {
+            y = e.clientY - 200 - pad;
+        }
+
+        tooltip.style.left = x + 'px';
+        tooltip.style.top = y + 'px';
+    }
+
+    function hideTooltip() {
+        tooltip.classList.remove('visible');
+    }
+
+    // Attach events to all location groups
+    document.querySelectorAll('.location-group').forEach(group => {
+        group.addEventListener('mouseenter', e => showTooltip(e, group));
+        group.addEventListener('mousemove', e => positionTooltip(e));
+        group.addEventListener('mouseleave', hideTooltip);
+    });
+</script>
+
 </body>
 </html>
