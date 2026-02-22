@@ -90,7 +90,7 @@
         z-index: 1000;
         opacity: 0;
         transition: opacity 0.2s;
-        max-width: 300px;
+        max-width: 380px;
     }
 
     .tooltip.visible {
@@ -121,59 +121,62 @@
 
     .tooltip-region {
         font-family: 'Share Tech Mono', monospace;
-        font-size: 8px;
+        font-size: 11px;
         letter-spacing: 3px;
         text-transform: uppercase;
         color: var(--tt-color, #c8922a);
-        margin-bottom: 4px;
-        opacity: 0.8;
+        margin-bottom: 5px;
+        opacity: 0.9;
+        font-weight: bold;
     }
 
     .tooltip-name {
-        font-size: 18px;
-        font-weight: 600;
+        font-size: 24px;
+        font-weight: 700;
         color: #ffffff;
         letter-spacing: 1px;
-        margin-bottom: 6px;
+        margin-bottom: 7px;
         line-height: 1.1;
     }
 
     .tooltip-type {
         font-family: 'Share Tech Mono', monospace;
-        font-size: 9px;
+        font-size: 11px;
         letter-spacing: 2px;
         color: var(--tt-color, #c8922a);
         text-transform: uppercase;
-        margin-bottom: 8px;
-        padding-bottom: 8px;
-        border-bottom: 1px solid rgba(255,255,255,0.06);
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        font-weight: bold;
     }
 
     .tooltip-desc {
-        font-size: 12px;
-        color: rgba(200,200,220,0.8);
-        line-height: 1.6;
+        font-size: 14px;
+        color: rgba(220,220,240,0.95);
+        line-height: 1.7;
         font-style: italic;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
     }
 
     .tooltip-tags {
         display: flex;
         flex-wrap: wrap;
-        gap: 4px;
-        margin-top: 8px;
+        gap: 5px;
+        margin-top: 10px;
     }
 
     .tooltip-tag {
         font-family: 'Share Tech Mono', monospace;
-        font-size: 8px;
+        font-size: 10px;
         letter-spacing: 1px;
-        padding: 2px 6px;
+        padding: 3px 8px;
         border-radius: 2px;
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.1);
-        color: rgba(200,200,220,0.6);
+        background: rgba(255,255,255,0.07);
+        border: 1px solid rgba(255,255,255,0.15);
+        color: rgba(220,220,240,0.8);
         text-transform: uppercase;
+        font-weight: bold;
     }
 
     .tooltip-tag.danger {
@@ -405,7 +408,7 @@
         <circle cx="240" cy="270" r="13" fill="none" stroke="#e8c44a" stroke-width="0.5" opacity="0.4"/>
         <!-- Ring -->
         <ellipse cx="240" cy="270" rx="20" ry="5" fill="none" stroke="#c8922a" stroke-width="1.2" opacity="0.7"/>
-        <text class="loc-label" x="240" y="294" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="9" fill="rgba(200,146,42,0.8)" letter-spacing="1">AURUM PRIME</text>
+        <text class="loc-label" x="240" y="294" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="11" fill="rgba(200,146,42,0.8)" letter-spacing="1">AURUM PRIME</text>
     </g>
 
     <!-- The Chandelier — orbital station -->
@@ -420,7 +423,7 @@
         <!-- Hexagonal station shape -->
         <polygon points="265,190 272,194 272,202 265,206 258,202 258,194" fill="#1a1600" stroke="#e8c44a" stroke-width="1.5" filter="url(#star-glow)"/>
         <circle cx="265" cy="198" r="3" fill="#e8c44a" opacity="0.8"/>
-        <text class="loc-label" x="283" y="200" text-anchor="start" font-family="'Share Tech Mono', monospace" font-size="8" fill="rgba(232,196,74,0.7)" letter-spacing="1">THE CHANDELIER</text>
+        <text class="loc-label" x="283" y="200" text-anchor="start" font-family="'Share Tech Mono', monospace" font-size="10" fill="rgba(232,196,74,0.7)" letter-spacing="1">THE CHANDELIER</text>
     </g>
 
     <!-- Velour — entertainment capital -->
@@ -434,7 +437,7 @@
         <circle class="loc-glow" cx="330" cy="220" r="16" fill="#e5198a" opacity="0.12"/>
         <circle cx="330" cy="220" r="9" fill="#1a0010" stroke="#e5198a" stroke-width="1.8" filter="url(#planet-glow)"/>
         <circle cx="330" cy="220" r="9" fill="none" stroke="#ff6eb4" stroke-width="0.5" opacity="0.5"/>
-        <text class="loc-label" x="330" y="238" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="9" fill="rgba(229,25,138,0.8)" letter-spacing="1">VELOUR</text>
+        <text class="loc-label" x="330" y="238" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="11" fill="rgba(229,25,138,0.8)" letter-spacing="1">VELOUR</text>
     </g>
 
     <!-- ── DRIFT CORRIDOR LOCATIONS ── -->
@@ -451,7 +454,7 @@
         <!-- Station shape — diamond -->
         <rect x="533" y="293" width="14" height="14" fill="#0a0f1a" stroke="#3a7abd" stroke-width="1.5" transform="rotate(45 540 300)" filter="url(#star-glow)"/>
         <circle cx="540" cy="300" r="3" fill="#3a7abd" opacity="0.9"/>
-        <text class="loc-label" x="540" y="320" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="9" fill="rgba(58,122,189,0.8)" letter-spacing="1">CASSIA STATION</text>
+        <text class="loc-label" x="540" y="320" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="11" fill="rgba(58,122,189,0.8)" letter-spacing="1">CASSIA STATION</text>
     </g>
 
     <!-- Harrow — manufacturing world -->
@@ -464,7 +467,7 @@
        data-tags="Venus-Nova|Labour Conflict|Untethered|Industrial">
         <circle class="loc-glow" cx="490" cy="380" r="14" fill="#7a7a9a" opacity="0.12"/>
         <circle cx="490" cy="380" r="8" fill="#0f0f14" stroke="#7a7a9a" stroke-width="1.5" filter="url(#planet-glow)"/>
-        <text class="loc-label" x="490" y="397" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="9" fill="rgba(122,122,154,0.7)" letter-spacing="1">HARROW</text>
+        <text class="loc-label" x="490" y="397" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="11" fill="rgba(122,122,154,0.7)" letter-spacing="1">HARROW</text>
     </g>
 
     <!-- Meridian — divided colony -->
@@ -479,7 +482,7 @@
         <circle cx="580" cy="430" r="9" fill="#001a16" stroke="#00b8a0" stroke-width="1.8" filter="url(#planet-glow)"/>
         <!-- Divided line across planet -->
         <line x1="571" y1="430" x2="589" y2="430" stroke="rgba(255,255,255,0.2)" stroke-width="0.8"/>
-        <text class="loc-label" x="580" y="448" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="9" fill="rgba(0,184,160,0.8)" letter-spacing="1">MERIDIAN</text>
+        <text class="loc-label" x="580" y="448" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="11" fill="rgba(0,184,160,0.8)" letter-spacing="1">MERIDIAN</text>
         <!-- Story marker -->
         <circle cx="594" cy="422" r="4" fill="none" stroke="#e5198a" stroke-width="1" opacity="0.8"/>
         <text x="594" y="425" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="5" fill="#e5198a" opacity="0.9">★</text>
@@ -501,7 +504,7 @@
         <circle cx="680" cy="252" r="3" fill="#2a1a08" stroke="#b87040" stroke-width="0.8" opacity="0.8"/>
         <circle cx="722" cy="256" r="2.5" fill="#2a1a08" stroke="#b87040" stroke-width="0.8" opacity="0.7"/>
         <circle cx="718" cy="286" r="2" fill="#2a1a08" stroke="#b87040" stroke-width="0.8" opacity="0.6"/>
-        <text class="loc-label" x="700" y="294" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="9" fill="rgba(184,112,64,0.7)" letter-spacing="1">RUST BELT</text>
+        <text class="loc-label" x="700" y="294" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="11" fill="rgba(184,112,64,0.7)" letter-spacing="1">RUST BELT</text>
     </g>
 
     <!-- ── OUTER REACH LOCATIONS ── -->
@@ -518,8 +521,8 @@
         <!-- Danger marker — pulsing red -->
         <circle cx="870" cy="340" r="14" fill="#0f0000" stroke="#8a0a0a" stroke-width="2" filter="url(#danger-glow)"/>
         <circle cx="870" cy="340" r="8" fill="#1a0000" stroke="rgba(180,20,20,0.5)" stroke-width="1" stroke-dasharray="2 2"/>
-        <text x="870" y="344" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="8" fill="rgba(180,20,20,0.8)">?</text>
-        <text class="loc-label" x="870" y="363" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="9" fill="rgba(180,20,20,0.7)" letter-spacing="1">VOSS CORRIDOR</text>
+        <text x="870" y="344" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="10" fill="rgba(180,20,20,0.8)">?</text>
+        <text class="loc-label" x="870" y="363" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="11" fill="rgba(180,20,20,0.7)" letter-spacing="1">VOSS CORRIDOR</text>
     </g>
 
     <!-- The Barrens — neutral meeting ground -->
@@ -535,7 +538,7 @@
         <circle cx="790" cy="480" r="5" fill="#0a0a0f" stroke="#5a5a7a" stroke-width="1" opacity="0.7"/>
         <circle cx="803" cy="478" r="4" fill="#0a0a0f" stroke="#5a5a7a" stroke-width="1" opacity="0.6"/>
         <circle cx="814" cy="480" r="3.5" fill="#0a0a0f" stroke="#5a5a7a" stroke-width="1" opacity="0.5"/>
-        <text class="loc-label" x="802" y="496" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="9" fill="rgba(90,90,122,0.6)" letter-spacing="1">THE BARRENS</text>
+        <text class="loc-label" x="802" y="496" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="11" fill="rgba(90,90,122,0.6)" letter-spacing="1">THE BARRENS</text>
     </g>
 
     <!-- Nova Seca — desert planet -->
@@ -548,7 +551,7 @@
        data-tags="Remnants|Venus-Nova Conflict|Desert|Active Crisis">
         <circle class="loc-glow" cx="940" cy="400" r="14" fill="#d4782a" opacity="0.12"/>
         <circle cx="940" cy="400" r="8" fill="#1a0800" stroke="#d4782a" stroke-width="1.8" filter="url(#planet-glow)"/>
-        <text class="loc-label" x="940" y="418" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="9" fill="rgba(212,120,42,0.7)" letter-spacing="1">NOVA SECA</text>
+        <text class="loc-label" x="940" y="418" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="11" fill="rgba(212,120,42,0.7)" letter-spacing="1">NOVA SECA</text>
     </g>
 
     <!-- Bloom — undiscovered paradise -->
@@ -564,7 +567,7 @@
         <!-- Bioluminescent glow effect -->
         <circle cx="960" cy="540" r="13" fill="none" stroke="#40c870" stroke-width="0.5" opacity="0.3" stroke-dasharray="2 3"/>
         <circle cx="960" cy="540" r="17" fill="none" stroke="#40c870" stroke-width="0.3" opacity="0.15"/>
-        <text class="loc-label" x="960" y="559" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="9" fill="rgba(64,200,112,0.8)" letter-spacing="1">BLOOM</text>
+        <text class="loc-label" x="960" y="559" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="11" fill="rgba(64,200,112,0.8)" letter-spacing="1">BLOOM</text>
     </g>
 
     <!-- The Scar — dangerous anomaly -->
@@ -583,7 +586,7 @@
         <line x1="1010" y1="452" x2="1016" y2="446" stroke="rgba(74,10,106,0.4)" stroke-width="0.8"/>
         <line x1="1014" y1="472" x2="1020" y2="476" stroke="rgba(74,10,106,0.4)" stroke-width="0.8"/>
         <text x="1000" y="465" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="7" fill="rgba(150,50,200,0.6)">SCAR</text>
-        <text class="loc-label" x="990" y="496" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="9" fill="rgba(106,30,160,0.7)" letter-spacing="1">THE SCAR</text>
+        <text class="loc-label" x="990" y="496" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="11" fill="rgba(106,30,160,0.7)" letter-spacing="1">THE SCAR</text>
     </g>
 
 
@@ -607,11 +610,11 @@
         <line x1="0" y1="0" x2="120" y2="0" stroke="rgba(200,146,42,0.3)" stroke-width="1"/>
         <line x1="0" y1="-4" x2="0" y2="4" stroke="rgba(200,146,42,0.3)" stroke-width="1"/>
         <line x1="120" y1="-4" x2="120" y2="4" stroke="rgba(200,146,42,0.3)" stroke-width="1"/>
-        <text x="60" y="-7" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="8" fill="rgba(200,146,42,0.4)">500 LIGHT YEARS</text>
+        <text x="60" y="-7" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="10" fill="rgba(200,146,42,0.4)">500 LIGHT YEARS</text>
     </g>
 
     <!-- ── VN CORP WATERMARK ── -->
-    <text x="980" y="690" text-anchor="end" font-family="'Share Tech Mono', monospace" font-size="8" fill="rgba(200,146,42,0.15)" letter-spacing="2">VENUS-NOVA CORP · NAVIGATION DIVISION · RESTRICTED</text>
+    <text x="980" y="690" text-anchor="end" font-family="'Share Tech Mono', monospace" font-size="10" fill="rgba(200,146,42,0.15)" letter-spacing="2">VENUS-NOVA CORP · NAVIGATION DIVISION · RESTRICTED</text>
 
 </svg>
 </div>
@@ -707,15 +710,15 @@
 
     function positionTooltip(e) {
         const pad = 16;
-        const tw = 300;
+        const tw = 380;
         let x = e.clientX + pad;
         let y = e.clientY + pad;
 
         if (x + tw > window.innerWidth - pad) {
             x = e.clientX - tw - pad;
         }
-        if (y + 200 > window.innerHeight - pad) {
-            y = e.clientY - 200 - pad;
+        if (y + 260 > window.innerHeight - pad) {
+            y = e.clientY - 260 - pad;
         }
 
         tooltip.style.left = x + 'px';
